@@ -1,11 +1,11 @@
 import React from 'react'
 
-const HomePage = () => {
+const loading = () => {
   return (
     <div>
-      HomePage
+      Loading...
     </div>
   )
 }
 
-export default HomePage
+export default loading

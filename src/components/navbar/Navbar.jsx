@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import styles from "./navbar.module.css"
-import Navlink from './navlink/Navlink'
+import NavLink from './navlink/NavLink'
 
 const Navbar = () => {
 
@@ -24,16 +24,25 @@ const Navbar = () => {
     },
   ]
 
+  const session = true;
+  const isAdmin = true;
+
   return (
     <div className={styles.container}>
       <div className={styles.logo}>Logo</div>
 
       <div className={styles.links}>
-        {
-          links.map((item, index)=>(
-           <Navlink key={index} item={item}></Navlink>
-          ))
-        }
+        {links.map((item, index)=>(
+           <NavLink key={index} item={item}></NavLink>
+        ))}
+        {session ? (
+          <>
+          {isAdmin && <NavLink item={{title: "Admin", path: "/admin"}}></NavLink>}
+          <button className={styles.logout}>Logout</button>
+          </>
+        ) : (
+          <NavLink item={{title: "Login", path: "/login"}}></NavLink>
+        )}
       </div>
     </div>
   )

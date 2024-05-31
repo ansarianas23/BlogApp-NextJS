@@ -20,16 +20,27 @@
 }
 
 .date{
-    font-size: 12px;
+    font-size: 15px;
+    font-weight: 500;
     transform: rotate(270deg);
-}
-
-.title{
-    font-size: 30px;
-    font-weight: bold;
     margin: auto;
 }
 
-.description{
+.title{
+    width: 90%;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    
+}
 
+.desctiption{
+    width: 90%;
+    margin-bottom: 20px;
+    font-weight: 300;
+    color: gray;
+}
+
+.link{
+    text-decoration: underline;
 }

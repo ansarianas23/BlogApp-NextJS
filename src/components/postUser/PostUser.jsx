@@ -1,25 +1,31 @@
 import React from "react";
 import styles from './postUser.module.css'
 import Image from "next/image";
+import { getUser } from "@/lib/data";
 
-const getData = async(userId)=>{
-    const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`, {cache: "no-store"});
-    if(!res.ok){
-        throw new Error("Something went wrong");
-    }
-    return res.json();
-}
+// Fetch with an API
+// const getData = async(userId)=>{
+//     const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`, {cache: "no-store"});
+//     if(!res.ok){
+//         throw new Error("Something went wrong");
+//     }
+//     return res.json();
+// }
 
 const PostUser = async ({userId}) => {
 
-  const user = await getData(userId);
+  // Fetch with an API
+  // const user = await getData(userId);
+
+  // Fetch without an API
+  const user = await getUser(userId);
 
   return (
     <div className={styles.detail}>
       <div className={styles.avatarImgContainer}>
         <Image
           className={styles.avatar}
-          src="https://images.pexels.com/photos/11136857/pexels-photo-11136857.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src={user.img ? user.img : "/noavatar.png"}
           width={50}
           height={50}
         />

@@ -2,42 +2,57 @@ import React, { Suspense } from 'react'
 import styles from './singlePostPage.module.css'
 import Image from 'next/image'
 import PostUser from '@/components/postUser/PostUser'
+import { getPost } from '@/lib/data'
 
-const getData = async(slug)=>{
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`);
-  if(!res.ok){
-      throw new Error("Something went wrong");
-  }
-  return res.json();
+// Fetch with an API
+// const getData = async(slug)=>{
+//   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`);
+//   if(!res.ok){
+//       throw new Error("Something went wrong");
+//   }
+//   return res.json();
+// }
+
+export const generateMetadata = async({params})=>{
+  const { slug } = params;
+  const post = await getPost(slug);
+  return {
+    title: post.title,
+    description: post.description
+  };
 }
 
 const SinglePostPage = async ({params}) => {
   const {slug} = params;
 
-  const post = await getData(slug);
+  // Fetch with an API
+  // const post = await getData(slug);
+
+  // Fetch without an API
+  const post = await getPost(slug);
 
   return (
     <div className={styles.container}>
-      <div className={styles.imgContainer}>
-        <Image className={styles.img} src='https://images.pexels.com/photos/11136857/pexels-photo-11136857.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' fill/>
-      </div>
+      {post.img && <div className={styles.imgContainer}>
+        <Image className={styles.img} src={post.img} fill/>
+      </div>}
 
       <div className={styles.textContainer}>
         <h1 className={styles.title}>Title</h1>
 
         <div className={styles.detail}>
-          <Suspense fallback={<div>Loading...</div>}>
+          {post && <Suspense fallback={<div>Loading...</div>}>
             <PostUser userId={post.userId}></PostUser>
-          </Suspense>
+          </Suspense>}
           
           <div className={styles.detailText}>
             <span className={styles.detailTitle}>Published</span>
-            <span className={styles.detailValue}>01.01.2024</span>
+            <span className={styles.detailValue}>{post.createdAt.toString().slice(4,16)}</span>
           </div>
         </div>
         
         <div className={styles.content}>
-          {post.body}
+          {post.description}
         </div>
       </div>
     </div>

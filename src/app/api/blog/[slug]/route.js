@@ -36,7 +36,7 @@ export const PATCH = async (request, {params})=>{
 
     try {
         connectToDb();
-        const post = await Post.findByIdAndUpdate({slug}, request.body, {new: true});
+        const post = await Post.findByIdAndUpdate(slug, request.body, {new: true});
         return NextResponse.json("Post Updated");
     } catch (error) {
         console.log(error)

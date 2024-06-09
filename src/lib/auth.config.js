@@ -20,9 +20,23 @@ export const authConfig = {
         },
         authorized({auth, request}){
             const user = auth?.user;
-            const isOnAdminPanel = request.nextUrl?.startsWith("/admin");
-            const isOnBlogPage = request.nextUrl?.startsWith("/blog");
-            const isOnLoginPage = request.nextUrl?.startsWith("/blog");
+            const isOnAdminPanel = request.nextUrl?.pathname.startsWith("/admin");
+            const isOnBlogPage = request.nextUrl?.pathname.startsWith("/blog");
+            const isOnLoginPage = request.nextUrl?.pathname.startsWith("/login");
+
+            if(isOnAdminPanel && !user?.isAdmin){
+                return false;
+            }
+
+            if(isOnBlogPage && !user){
+                return false;
+            }
+
+            if(isOnLoginPage && user){
+                return Response.redirect(new URL("/", request.nextUrl));
+            }
+
+            return true;
         }
     }
 }

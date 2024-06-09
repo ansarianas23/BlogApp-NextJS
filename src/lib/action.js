@@ -6,7 +6,7 @@ import {Post, User} from './models'
 import { signIn, signOut } from "./auth";
 import bcrypt from 'bcryptjs'
 
-export const addPost = async (formData)=>{
+export const addPost = async (previousState,formData)=>{
     const {title, description, slug, userId} = Object.entries(formData);
 
     try {
@@ -19,6 +19,7 @@ export const addPost = async (formData)=>{
         });
         await newPost.save();
         revalidatePath("/blog")
+        revalidatePath("/admin")
         console.log("Saved to DB")
     } catch (error) {
         console.log(error);
@@ -34,7 +35,43 @@ export const deletePost = async (formData)=>{
         connectToDb();
         await Post.findByIdAndDelete(id)
         revalidatePath("/blog")
+        revalidatePath("/admin")
         console.log("Deleted from DB")
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+export const addUser = async (previousState, formData)=>{
+    const {username, email, password, img} = Object.entries(formData);
+
+    try {
+        connectToDb();
+        const newUser = new User({
+            username,
+            email,
+            password,
+            img
+        });
+        await newUser.save(); 
+        revalidatePath("/admin")
+        console.log("Saved to DB")
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+export const deleteUser = async (formData)=>{
+    const {id} = Object.entries(formData);
+
+    try {
+        connectToDb();
+        await Post.deleteMany({userId: id})
+        await User.findByIdAndDelete(id);
+        revalidatePath("/admin");
+        console.log("Deleted from DB");
     } catch (error) {
         console.log(error);
         throw new Error(error);
